@@ -1,0 +1,35 @@
+#!/bin/sh 
+
+CLONE_DIR=bootstrap-downloader
+OUTPUT_DIR=$1
+VERSION=$2
+if [ "${VERSION}" == "" ]; then
+  VERSION="2.0.3"
+fi
+
+if [ -d ${CLONE_DIR} ]; then
+  mv ${CLONE_DIR} ${CLONE_DIR}_bk
+fi
+
+git clone git://github.com/seratch/bootstrap-downloader.git -b ${VERSION}
+cd ${CLONE_DIR}
+rm -rf .git
+rm -rf README.md
+rm -rf tools
+cd - > /dev/null
+
+if [ -d ${OUTPUT_DIR} ]; then
+  cp -pr ${CLONE_DIR}/* ${OUTPUT_DIR}/.
+  rm -rf ${CLONE_DIR}
+else
+   mv ${CLONE_DIR} ${OUTPUT_DIR}
+fi
+
+if [ -d ${CLONE_DIR} ]; then
+  mv ${CLONE_DIR}_bk ${CLONE_DIR}
+fi
+
+echo ""
+echo "Twitter Bootstrap ${VERSION} installed to ${OUTPUT_DIR}" 
+echo ""
+
